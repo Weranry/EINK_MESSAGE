@@ -1,0 +1,8 @@
+{
+    "version": 2,
+    "routes": [
+      { "src": "/(?<project>[^/]+)/getpic", "dest": "/api/[project]/getpic.js" },
+      { "src": "/(?<project>[^/]+)/getapi", "dest": "/api/[project]/getapi.js" },
+      { "src": "/(?<project>[^/]+)/(.*)", "dest": "/public/[project]/$2" }
+    ]
+  }
