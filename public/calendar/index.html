@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日历卡片</title>
+    <link rel="stylesheet" href="/styles/globals.css">
+</head>
+<body>
+    <div class="card">
+        <canvas id="calendarCanvas" width="400" height="300"></canvas>
+    </div>
+    <script>
+        const project = window.location.pathname.split('/')[1];
+
+        async function fetchCalendarData() {
+            const response = await fetch(`/${project}/getapi`);
+            return await response.json();
+        }
+
+        function drawCalendar(data) {
+            const canvas = document.getElementById('calendarCanvas');
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 400, 300);
+
+            ctx.fillStyle = 'black';
+
+            ctx.font = 'bold 24px SimHei';
+            ctx.fillText(`${data.SolarYear}${data.SolarMonth}${data.SolarDay}`, 20, 40);
+            ctx.fillText(data.WeekDay, 20, 70);
+
+            ctx.font = '18px SimHei';
+            ctx.fillText(`${data.lunarMonth}${data.lunarDay}`, 20, 100);
+
+            ctx.font = '14px SimHei';
+            let y = 130;
+            ctx.fillText(`农历：${data.ganzhiYear} ${data.ganzhiMonth} ${data.ganzhiDay}`, 20, y);
+            y += 20;
+            ctx.fillText(`月相：${data.yuexiang}`, 20, y);
+            y += 20;
+            ctx.fillText(`物候：${data.wuhou}`, 20, y);
+            y += 20;
+            ctx.fillText(`节气：${data.hou}`, 20, y);
+            if (data.shujiu !== 'N/A') {
+                y += 20;
+                ctx.fillText(`数九：${data.shujiu}`, 20, y);
+            }
+            if (data.fu !== 'N/A') {
+                y += 20;
+                ctx.fillText(`伏：${data.fu}`, 20, y);
+            }
+        }
+
+        (async () => {
+            const data = await fetchCalendarData();
+            drawCalendar(data);
+        })();
+    </script>
+</body>
+</html>
