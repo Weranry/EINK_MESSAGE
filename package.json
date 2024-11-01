@@ -1,7 +1,7 @@
 {
-  "name": "EINK_MESSAGE",
+  "name": "calendar-project",
   "version": "1.0.0",
-  "description": "CARDS with API and image generation",
+  "description": "Calendar project with API and image generation",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

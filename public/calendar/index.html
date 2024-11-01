@@ -8,55 +8,37 @@
 </head>
 <body>
     <div class="card">
-        <canvas id="calendarCanvas" width="400" height="300"></canvas>
+        <h1>日历卡片</h1>
+        <img id="calendarImage" alt="日历" />
+        <div id="calendarData"></div>
     </div>
     <script>
-        const project = window.location.pathname.split('/')[1];
+        const project = 'calendar';
 
         async function fetchCalendarData() {
             const response = await fetch(`/${project}/getapi`);
             return await response.json();
         }
 
-        function drawCalendar(data) {
-            const canvas = document.getElementById('calendarCanvas');
-            const ctx = canvas.getContext('2d');
+        async function loadCalendar() {
+            const img = document.getElementById('calendarImage');
+            img.src = `/${project}/getpic`;
 
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, 400, 300);
-
-            ctx.fillStyle = 'black';
-
-            ctx.font = 'bold 24px SimHei';
-            ctx.fillText(`${data.SolarYear}${data.SolarMonth}${data.SolarDay}`, 20, 40);
-            ctx.fillText(data.WeekDay, 20, 70);
-
-            ctx.font = '18px SimHei';
-            ctx.fillText(`${data.lunarMonth}${data.lunarDay}`, 20, 100);
-
-            ctx.font = '14px SimHei';
-            let y = 130;
-            ctx.fillText(`农历：${data.ganzhiYear} ${data.ganzhiMonth} ${data.ganzhiDay}`, 20, y);
-            y += 20;
-            ctx.fillText(`月相：${data.yuexiang}`, 20, y);
-            y += 20;
-            ctx.fillText(`物候：${data.wuhou}`, 20, y);
-            y += 20;
-            ctx.fillText(`节气：${data.hou}`, 20, y);
-            if (data.shujiu !== 'N/A') {
-                y += 20;
-                ctx.fillText(`数九：${data.shujiu}`, 20, y);
-            }
-            if (data.fu !== 'N/A') {
-                y += 20;
-                ctx.fillText(`伏：${data.fu}`, 20, y);
-            }
+            const data = await fetchCalendarData();
+            const dataDiv = document.getElementById('calendarData');
+            dataDiv.innerHTML = `
+                <p>公历：${data.SolarYear}${data.SolarMonth}${data.SolarDay} ${data.WeekDay}</p>
+                <p>农历：${data.lunarMonth}${data.lunarDay}</p>
+                <p>干支：${data.ganzhiYear} ${data.ganzhiMonth} ${data.ganzhiDay}</p>
+                <p>月相：${data.yuexiang}</p>
+                <p>物候：${data.wuhou}</p>
+                <p>节气：${data.hou}</p>
+                ${data.shujiu !== 'N/A' ? `<p>数九：${data.shujiu}</p>` : ''}
+                ${data.fu !== 'N/A' ? `<p>伏：${data.fu}</p>` : ''}
+            `;
         }
 
-        (async () => {
-            const data = await fetchCalendarData();
-            drawCalendar(data);
-        })();
+        loadCalendar();
     </script>
 </body>
 </html>
