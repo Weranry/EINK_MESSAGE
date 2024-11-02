@@ -5,9 +5,7 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 注册字体
-const { registerFont } = require('canvas');
-registerFont(path.join(__dirname, 'fonts', 'simhei.ttf'), { family: 'SimHei' });
+
 
 // 主页路由
 app.get('/', (req, res) => {
